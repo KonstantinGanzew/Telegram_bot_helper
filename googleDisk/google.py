@@ -1,13 +1,8 @@
-import os
-import io
-import asyncio
+
 import httplib2
 import apiclient.discovery
 import config
 from oauth2client.service_account import ServiceAccountCredentials
-from google.oauth2 import service_account
-from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
-from googleapiclient.discovery import build
 
 
 CREDENTIALS_FILE = config.CREDETIALS_FILE
