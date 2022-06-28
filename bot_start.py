@@ -4,7 +4,6 @@ from create_bot import dp
 from googleDisk import google
 
 
-
 async def on_startup(_):
     print('Бот запущен')
 
