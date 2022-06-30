@@ -1,6 +1,47 @@
 import requests
 import config
 
+# Список для экранирования запросов
+LIST_IJECTOR = ['SELECT',
+                'CREATE',
+                'DATABASE',
+                'USE',
+                'TABLES',
+                'SOURCE',
+                'DESCRIBE',
+                'INSERT',
+                'INTO',
+                'VALUES',
+                'UPDATE',
+                'SET',
+                'WHERE',
+                'PRIMARY',
+                'FOREIGN ',
+                'KEY',
+                'REFERENCES',
+                'DROP',
+                'SHOW',
+                'FROM',
+                'OPENQUERY',
+                'INNER',
+                'JOIN',
+                'VIEW',
+                'ORDER',
+                'BETWEEN',
+                'LIKE',
+                'BY',
+                'IN',
+                'AND',
+                'link',
+                'param_text',
+                'DELETE',
+                'GROUP',
+                'DECLARE',
+                'REPLACE',
+                'DISTINCT',
+                'HAVING',
+                'COUNT',
+                'TABLE']
 
 # Аутенфицирует сотрудников
 def authentications(TEL_ID):
@@ -8,7 +49,10 @@ def authentications(TEL_ID):
 
 
 # Создает процесс в ерпе и возращает его в ответе бота
-def create_process(message_text):
+def create_process(message):
+    message_text = message[3]
+    for item in LIST_IJECTOR:
+        message_text = message_text.replace(item, 'Непонятное выражение')
     param = {
         'action': 'processCreate',
         'typeId': 10470,

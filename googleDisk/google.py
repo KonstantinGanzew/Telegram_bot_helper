@@ -29,3 +29,25 @@ async def down_drive(text, data):
         body=resource,
         valueInputOption="USER_ENTERED"
     ).execute()
+
+async def main_google(date, data, data1, data2, data3, spreadsheet_id):
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(
+        CREDENTIALS_FILE,
+        ['https://www.googleapis.com/auth/spreadsheets',
+        'https://www.googleapis.com/auth/drive'])
+    httpAuth = credentials.authorize(httplib2.Http())
+    service = apiclient.discovery.build('sheets', 'v4', http = httpAuth)
+
+    list = [[date], [data], [data1], [data2], [data3]]
+
+    resource = {
+        "majorDimension": "COLUMNS",
+        "values": list
+    }
+    range = "Логирование!A:E"
+    service.spreadsheets().values().append(
+        spreadsheetId=spreadsheet_id,
+        range=range,
+        body=resource,
+        valueInputOption="USER_ENTERED"
+    ).execute()

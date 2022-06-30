@@ -1,4 +1,4 @@
-from concurrent.futures import process
+import config
 import datetime
 import erp
 from aiogram import types, Dispatcher
@@ -13,6 +13,7 @@ canon_groups = [-603892836,
 
 # Отвечает на команду старт
 async def command_start(message: types.Message):
+    log(message.from_user.id, message.from_user.first_name, message.from_user.username, message.text.replace('/it ', ''))
     if message.chat.id in canon_groups:
         await bot.send_message(message.chat.id, 'Бот для переноса всех запросов в гугл таблицу, для отправки сообщения необходимо написать /it и текст сообщения')
     if erp.authentications(message.from_user.id):
@@ -21,14 +22,16 @@ async def command_start(message: types.Message):
 
 # Отправляет сообщение на гугл диск и создает процесс в ответ на команду /it
 async def report_in_google_sheets(message: types.Message):
+    data_abaut_user = [message.from_user.id, message.from_user.first_name, message.from_user.username, message.text.replace('/it ', '')]
+    date = str(datetime.datetime.now())
+    date = date[0 : date.rfind('.')-1]
+    await log(date, data_abaut_user)
     if message.chat.id in canon_groups:
-        date = str(datetime.datetime.now())
-        date = date[0 : date.rfind('.')-1]
-        await google.down_drive(message.text.replace('/it ', ''), date)
-        erp.create_process(message.text)
+        await google.down_drive(data_abaut_user[3], date)
+        erp.create_process(data_abaut_user)
         await bot.send_message(message.chat.id, 'Сообщение было добавлино в гугл таблицу с указанием времени')
-    if erp.authentications(message.from_user.id):
-        process_id = erp.create_process(message.text.replace('/it ', ''))
+    elif erp.authentications(message.from_user.id):
+        process_id = erp.create_process(data_abaut_user)
         await bot.send_message(message.from_user.id, f'Процесс был создан номер процесса {process_id}')
 
 
@@ -36,3 +39,10 @@ async def report_in_google_sheets(message: types.Message):
 def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=['start'])
     dp.register_message_handler(report_in_google_sheets, commands=['it'])
+
+
+# Логирование в гугл диск
+async def log(log_text):
+    date = str(datetime.datetime.now())
+    date = date[0 : date.rfind('.')-1]
+    await google.main_google(date, log_text[0], log_text[1], log_text[2], log_text[3], config.SHEETS_LOG)
