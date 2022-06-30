@@ -13,7 +13,7 @@ canon_groups = [-603892836,
 
 # Отвечает на команду старт
 async def command_start(message: types.Message):
-    log(message.from_user.id, message.from_user.first_name, message.from_user.username, message.text.replace('/it ', ''))
+    await log([message.from_user.id, message.from_user.first_name, message.from_user.username, message.text.replace('/it ', '')])
     if message.chat.id in canon_groups:
         await bot.send_message(message.chat.id, 'Бот для переноса всех запросов в гугл таблицу, для отправки сообщения необходимо написать /it и текст сообщения')
     if erp.authentications(message.from_user.id):
@@ -25,7 +25,7 @@ async def report_in_google_sheets(message: types.Message):
     data_abaut_user = [message.from_user.id, message.from_user.first_name, message.from_user.username, message.text.replace('/it ', '')]
     date = str(datetime.datetime.now())
     date = date[0 : date.rfind('.')-1]
-    await log(date, data_abaut_user)
+    await log(data_abaut_user)
     if message.chat.id in canon_groups:
         await google.down_drive(data_abaut_user[3], date)
         erp.create_process(data_abaut_user)
