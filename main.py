@@ -28,10 +28,10 @@ async def report_in_google_sheets(message: types.Message):
     await log(data_abaut_user)
     if message.chat.id in canon_groups:
         await google.down_drive(data_abaut_user[3], date)
-        erp.create_process(data_abaut_user)
+        erp.create_process(data_abaut_user, config.TASKO_MOTORS)
         await bot.send_message(message.chat.id, 'Сообщение было добавлино в гугл таблицу с указанием времени')
     elif erp.authentications(message.from_user.id):
-        process_id = erp.create_process(data_abaut_user)
+        process_id = erp.create_process(data_abaut_user, '')
         await bot.send_message(message.from_user.id, f'Процесс был создан номер процесса {process_id}')
 
 

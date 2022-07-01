@@ -12,7 +12,7 @@ def authentications(TEL_ID):
 
 
 # Создает процесс в ерпе и возращает его в ответе бота
-def create_process(message):
+def create_process(message, dog_ul):
     message_text = message[3]
     for item in LIST_IJECTOR:
         message_text = message_text.replace(item, '')
@@ -26,10 +26,19 @@ def create_process(message):
     response = requests.get(URL, params=param)
     id_process = response.json()['data']['process']['id']
     param = {
-    'id': id_process,
-    'action': 'processGroupsUpdate',
-    'groupRole': '533:0',
-    'responseType': 'json',
+        'id': id_process,
+        'action': 'processGroupsUpdate',
+        'groupRole': '533:0',
+        'responseType': 'json',
     }
     response = requests.get(URL, params=param)
+    if dog_ul == config.TASKO_MOTORS:
+        param = {
+            'processId': id_process,
+            'billingId': 'rb',
+            'action': 'addProcessContractLink',
+            'contractTitle': dog_ul,
+            'responseType': 'json',
+        }
+        response = requests.post(config.URL_ADD_CONTRACT, params=param)
     return id_process
