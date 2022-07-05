@@ -32,7 +32,7 @@ def create_process(message, dog_ul):
         'responseType': 'json',
     }
     response = requests.get(URL, params=param)
-    if dog_ul == config.TASKO_MOTORS:
+    if dog_ul != '':
         param = {
             'processId': id_process,
             'billingId': 'rb',

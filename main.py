@@ -9,7 +9,7 @@ from googleDisk import google
 # Авторизованные группы
 canon_groups = [-603892836,
                 -618154662]
-
+groups_it = -639429713
 
 # Отвечает на команду старт
 async def command_start(message: types.Message):
@@ -18,6 +18,8 @@ async def command_start(message: types.Message):
         await bot.send_message(message.chat.id, 'Бот для переноса всех запросов в гугл таблицу, для отправки сообщения необходимо написать /it и текст сообщения')
     if erp.authentications(message.from_user.id):
         await bot.send_message(message.from_user.id, 'Добро пожаловать на галеру фраерок...')
+    if message.chat.id == groups_it:
+        await bot.send_message(message.chat.id, 'Бот для формирования заявок')
 
 
 # Отправляет сообщение на гугл диск и создает процесс в ответ на команду /it
@@ -33,6 +35,9 @@ async def report_in_google_sheets(message: types.Message):
     elif erp.authentications(message.from_user.id):
         process_id = erp.create_process(data_abaut_user, '')
         await bot.send_message(message.from_user.id, f'Процесс был создан номер процесса {process_id}')
+    elif message.chat.id == groups_it:
+        erp.create_process(data_abaut_user, config.VATRUSHKIN)
+        await bot.send_message(message.chat.id, 'Обращение было созданно')
 
 
 # Регистрируем комманды
