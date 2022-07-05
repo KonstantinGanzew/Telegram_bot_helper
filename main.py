@@ -6,20 +6,14 @@ from create_bot import bot
 from googleDisk import google
 
 
-# Авторизованные группы
-canon_groups = [-603892836,
-                -618154662]
-groups_it = -639429713
 
 # Отвечает на команду старт
 async def command_start(message: types.Message):
     await log([message.from_user.id, message.from_user.first_name, message.from_user.username, message.text.replace('/it ', '')])
-    if message.chat.id in canon_groups:
-        await bot.send_message(message.chat.id, 'Бот для переноса всех запросов в гугл таблицу, для отправки сообщения необходимо написать /it и текст сообщения')
+    if message.chat.id in config.CANNON_GROUP:
+        await bot.send_message(message.chat.id, 'Бот для ведения задач. Для заведения задач необходимо написать /it и текст сообщения')
     if erp.authentications(message.from_user.id):
         await bot.send_message(message.from_user.id, 'Добро пожаловать на галеру фраерок...')
-    if message.chat.id == groups_it:
-        await bot.send_message(message.chat.id, 'Бот для формирования заявок')
 
 
 # Отправляет сообщение на гугл диск и создает процесс в ответ на команду /it
@@ -28,16 +22,15 @@ async def report_in_google_sheets(message: types.Message):
     date = str(datetime.datetime.now())
     date = date[0 : date.rfind('.')-1]
     await log(data_abaut_user)
-    if message.chat.id in canon_groups:
+    if message.chat.id in config.CANNON_GROUP:
         await google.down_drive(data_abaut_user[3], date)
-        erp.create_process(data_abaut_user, config.TASKO_MOTORS)
-        await bot.send_message(message.chat.id, 'Сообщение было добавлино в гугл таблицу с указанием времени')
+        process_id = erp.create_process(data_abaut_user, config.DOG_AND_ID_GROUP[message.chat.id])
+        await bot.send_message(message.chat.id, 'Запрос был зафиксирован')
+        await bot.send_message(config.CANNON_GROUP[0], f'Процесс был создан из группы {config.NAME_GROUP[message.chat.id]}, номер процесса\nhttp://erp.core.ufanet.ru/user/process#{process_id}')
     elif erp.authentications(message.from_user.id):
         process_id = erp.create_process(data_abaut_user, '')
-        await bot.send_message(message.from_user.id, f'Процесс был создан номер процесса {process_id}')
-    elif message.chat.id == groups_it:
-        erp.create_process(data_abaut_user, config.VATRUSHKIN)
-        await bot.send_message(message.chat.id, 'Обращение было созданно')
+        await bot.send_message(config.CANNON_GROUP[0], f'Процесс был создан не из группы посмотри в логах на негодяя, номер процесса\nhttp://erp.core.ufanet.ru/user/process#{process_id}')
+
 
 
 # Регистрируем комманды
