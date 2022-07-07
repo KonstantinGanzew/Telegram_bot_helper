@@ -25,8 +25,8 @@ async def report_in_google_sheets(message: types.Message):
     date = date[0 : date.rfind('.')-1]
     await log(data_abaut_user)
     if message.chat.id in config.CANNON_GROUP:
-        await google.down_drive(data_abaut_user[3], date)
-        process_id = erp.create_process(data_abaut_user, config.DOG_AND_ID_GROUP[message.chat.id])
+        await google.down_drive(data_abaut_user[3], date, config.DOG_AND_ID_GROUP[message.chat.id][1])
+        process_id = erp.create_process(data_abaut_user, config.DOG_AND_ID_GROUP[message.chat.id][0])
         await bot.send_message(message.chat.id, 'Запрос был зафиксирован')
         await bot.send_message(config.CANNON_GROUP[0], f'Процесс был создан из группы {message.chat.title}, номер процесса\nhttp://erp.core.ufanet.ru/user/process#{process_id}')
     elif erp.authentications(message.from_user.id):
