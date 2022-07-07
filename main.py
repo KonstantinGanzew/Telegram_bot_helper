@@ -13,7 +13,7 @@ async def command_start(message: types.Message):
     if message.chat.id in config.CANNON_GROUP:
         await bot.send_message(message.chat.id, 'Бот для ведения задач. Для заведения задач необходимо написать /it и текст сообщения')
     else:
-        await bot.send_message(225923687, f'{message.chat.id}, {message}')
+        await bot.send_message(225923687, f'Ид группы {message.chat.id}\nНазвание группы {message.chat.title}')
     if erp.authentications(message.from_user.id):
         await bot.send_message(message.from_user.id, 'Добро пожаловать на галеру фраерок...')
 
