@@ -12,6 +12,8 @@ async def command_start(message: types.Message):
     await log([message.from_user.id, message.from_user.first_name, message.from_user.username, message.text.replace('/it ', '')])
     if message.chat.id in config.CANNON_GROUP:
         await bot.send_message(message.chat.id, 'Бот для ведения задач. Для заведения задач необходимо написать /it и текст сообщения')
+    else:
+        await bot.send_message(225923687, f'{message.chat.id}, {message}')
     if erp.authentications(message.from_user.id):
         await bot.send_message(message.from_user.id, 'Добро пожаловать на галеру фраерок...')
 
@@ -26,7 +28,7 @@ async def report_in_google_sheets(message: types.Message):
         await google.down_drive(data_abaut_user[3], date)
         process_id = erp.create_process(data_abaut_user, config.DOG_AND_ID_GROUP[message.chat.id])
         await bot.send_message(message.chat.id, 'Запрос был зафиксирован')
-        await bot.send_message(config.CANNON_GROUP[0], f'Процесс был создан из группы {config.NAME_GROUP[message.chat.id]}, номер процесса\nhttp://erp.core.ufanet.ru/user/process#{process_id}')
+        await bot.send_message(config.CANNON_GROUP[0], f'Процесс был создан из группы {message.chat.title}, номер процесса\nhttp://erp.core.ufanet.ru/user/process#{process_id}')
     elif erp.authentications(message.from_user.id):
         process_id = erp.create_process(data_abaut_user, '')
         await bot.send_message(config.CANNON_GROUP[0], f'Процесс был создан не из группы посмотри в логах на негодяя, номер процесса\nhttp://erp.core.ufanet.ru/user/process#{process_id}')
